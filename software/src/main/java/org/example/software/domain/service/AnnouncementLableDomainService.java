@@ -10,16 +10,18 @@ import org.example.software.infrastructure.repository.BaseRepository;
 import org.example.software.infrastructure.repository.announcement.AnnouncementLableEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -62,15 +64,28 @@ public class AnnouncementLableDomainService {
     }
 
     /** 分页查询 */
-    public Page<AnnouncementLableEntity> findByCondition(AnnouncementLableDto dto, Pageable pageable) {
+    public Page<AnnouncementLableEntity> findByCondition(final AnnouncementLableDto dto) {
+        //jpa是从0开始分页的
+        Pageable pageable = PageRequest.of(dto.getPageNum() - 1, dto.getPageSize(), Sort.Direction.DESC, "createTime");
 
-//        return repository.findAll(new Specification<AnnouncementLableEntity>() {
-//            public Predicate toPredicate(Root<AnnouncementLableEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-//                return null;
-//            }
-//        });
+        return repository.findAll(new Specification<AnnouncementLableEntity>() {
 
-        return null;
+            public Predicate toPredicate(Root<AnnouncementLableEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                if (dto.getId() != null && dto.getId() > 0) {
+                    predicates.add(cb.equal(root.get("id").as(String.class), dto.getId().toString()));
+                }
+                if (dto.getName() != null && dto.getName().length() > 0) {
+                    predicates.add(cb.like(root.get("name").as(String.class), "%" + dto.getName() + "%"));
+                }
+//                if (dto.getStart() != null && dto.getEnd() != null) {
+//                    predicates.add(cb.between(root.get("createTime").as(String.class), dto.getStart(), dto.getEnd()));
+//                }
+
+                return query.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+            }
+        },pageable);
+
     }
 
 

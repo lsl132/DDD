@@ -15,5 +15,7 @@ public class AnnouncementLableDto {
     private String name;
     private Date start;
     private Date end;
+    private Integer pageNum;
+    private Integer pageSize;
 
 }

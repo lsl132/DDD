@@ -60,12 +60,18 @@ public class AnnouncementLableController {
     }
 
     @PostMapping("/find")
-    public ResponseResult findAnnouncementLableAll() {
+    public ResponseResult findAllAnnouncementLable() {
 
         log.info("-------find--------");
 
-        return announcementLableApplicationService.findAll();
+//        return announcementLableApplicationService.findAll();
+        return null;
+    }
 
+    @PostMapping("/findBy")
+    public ResponseResult findByAnnouncementLable(@RequestBody @Validated AnnouncementLableIn in) {
+        log.info("-------findBy--------");
+        return announcementLableApplicationService.findByCondition(in);
     }
 
 }

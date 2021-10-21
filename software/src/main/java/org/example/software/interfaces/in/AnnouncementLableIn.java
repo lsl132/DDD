@@ -15,5 +15,7 @@ public class AnnouncementLableIn {
     private String name;
     private Date start;
     private Date end;
+    private Integer pageNum = 1;
+    private Integer pageSize = 20;
 
 }
