@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: software
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: false
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/cp_background_center?characterEncoding=UTF-8}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:abcd1234}
