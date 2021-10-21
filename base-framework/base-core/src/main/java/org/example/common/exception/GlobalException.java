@@ -24,6 +24,12 @@ public class GlobalException extends RuntimeException {
         this.details = GlobalExceptionEnum.getValue(code).getDescribe();
     }
 
+    public  GlobalException(String code, String details) {
+        super(code);
+        this.code = code;
+        this.details = details;
+    }
+
     public  GlobalException(String code, Throwable cause) {
         super(code, cause);
         this.code = code;

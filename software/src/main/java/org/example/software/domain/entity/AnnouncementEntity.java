@@ -1,8 +1,10 @@
 package org.example.software.domain.entity;
 
 import lombok.Data;
+import org.example.software.domain.aggregate.AnnouncementAggregate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -13,7 +15,7 @@ import java.util.Date;
 
 @Data
 @Entity(name = "tb_announcement")
-public class AnnouncementEntity {
+public class AnnouncementEntity implements Serializable {
 
     @Id
     @Column(columnDefinition = "BIGINT(20)  COMMENT '公告ID'")
@@ -23,6 +25,9 @@ public class AnnouncementEntity {
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '标题'")
     private String title;
 
+    @Column(columnDefinition = "int(10)  COMMENT '公告类型'")
+    private Integer type;
+
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '标签'")
     private String label;
 
@@ -30,7 +35,7 @@ public class AnnouncementEntity {
     private String content;
 
     @Column(columnDefinition = "int(2)  COMMENT '状态 0未发布 1已发布 2撤回'")
-    private Integer stateCode;
+    private Integer state;
 
     @Column(columnDefinition = "int(2)  COMMENT '是否置顶 0不置顶 1置顶'")
     private Integer isTop;
@@ -64,11 +69,18 @@ public class AnnouncementEntity {
 
 
     /**  租户范围 */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcement", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
     private Collection<AnnouncementTenantScopeEntity> tenantScopes;
 
     /**  租户下可见用户 */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcement", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
     private Collection<AnnouncementConsultUserRefEntity> ref;
+
+
+
+    public AnnouncementAggregate entityToAggregate() {
+        return null;
+    }
+
 
 }

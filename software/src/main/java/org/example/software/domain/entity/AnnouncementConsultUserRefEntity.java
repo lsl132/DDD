@@ -3,6 +3,7 @@ package org.example.software.domain.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
 
 @Data
 @Entity(name = "tb_announcement_consult_user_ref")
-public class AnnouncementConsultUserRefEntity {
+public class AnnouncementConsultUserRefEntity implements Serializable {
 
     @Id
     @Column(columnDefinition = "BIGINT(20)  COMMENT '数据标识'")

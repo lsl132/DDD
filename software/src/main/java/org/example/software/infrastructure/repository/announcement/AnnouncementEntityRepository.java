@@ -1,4 +1,4 @@
-package org.example.software.infrastructure.repository;
+package org.example.software.infrastructure.repository.announcement;
 
 import org.example.software.domain.entity.AnnouncementEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
