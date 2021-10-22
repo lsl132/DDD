@@ -1,6 +1,6 @@
 package org.example.software.infrastructure.repository.announcement;
 
-import org.example.software.domain.entity.AnnouncementPublishEntity;
+import org.example.software.domain.entity.AnnouncementAuthorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author SHK
  */
 @Repository
-public interface AnnouncementPublishEntityRepository extends JpaRepository<AnnouncementPublishEntity, Long>, JpaSpecificationExecutor<AnnouncementPublishEntity> {
+public interface AnnouncementAuthorEntityRepository extends JpaRepository<AnnouncementAuthorEntity, Integer>, JpaSpecificationExecutor<AnnouncementAuthorEntity> {
 }

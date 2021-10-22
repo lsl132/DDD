@@ -3,10 +3,11 @@ package org.example.software.interfaces.facade;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.response.ResponseResult;
 import org.example.software.application.service.AnnouncementApplicationService;
-import org.example.software.interfaces.in.CreateAnnouncementIn;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.software.interfaces.in.AnnouncementIn;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AnnouncementController {
 
 
-    @Autowired
+    @Resource
     private AnnouncementApplicationService announcementApplicationService;
 
 
@@ -33,7 +34,7 @@ public class AnnouncementController {
      * @return
      */
     @PostMapping("/create")
-    public ResponseResult createAnnouncement(@RequestBody @Validated CreateAnnouncementIn in) {
+    public ResponseResult createAnnouncement(@RequestBody @Validated AnnouncementIn in) {
 
         log.info("-------test--------");
 

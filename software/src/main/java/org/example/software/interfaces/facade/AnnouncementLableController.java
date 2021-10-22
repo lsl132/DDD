@@ -2,29 +2,28 @@ package org.example.software.interfaces.facade;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.response.ResponseResult;
-import org.example.software.application.service.AnnouncementApplicationService;
 import org.example.software.application.service.AnnouncementLableApplicationService;
 import org.example.software.interfaces.in.AnnouncementLableIn;
-import org.example.software.interfaces.in.CreateAnnouncementIn;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
+/**
+ * 公告标签入口
+ * @author SHK
+ */
 @Slf4j
 @RestController
 @RequestMapping("/announcement/lable")
 public class AnnouncementLableController {
 
 
-    @Autowired
+    @Resource
     private AnnouncementLableApplicationService announcementLableApplicationService;
-
-
-
-
 
 
     /**
@@ -33,7 +32,7 @@ public class AnnouncementLableController {
      * @return
      */
     @PostMapping("/create")
-    public ResponseResult createAnnouncementLable(@RequestBody @Validated AnnouncementLableIn in) {
+    public ResponseResult createLable(@RequestBody @Validated AnnouncementLableIn in) {
 
         log.info("-------create--------");
 
@@ -42,7 +41,7 @@ public class AnnouncementLableController {
     }
 
     @PostMapping("/edit")
-    public ResponseResult editAnnouncementLable(@RequestBody @Validated AnnouncementLableIn in) {
+    public ResponseResult editLable(@RequestBody @Validated AnnouncementLableIn in) {
 
         log.info("-------edit--------");
 
@@ -51,7 +50,7 @@ public class AnnouncementLableController {
     }
 
     @PostMapping("/remove")
-    public ResponseResult removeAnnouncementLable(@RequestBody @Validated AnnouncementLableIn in) {
+    public ResponseResult removeLable(@RequestBody @Validated AnnouncementLableIn in) {
 
         log.info("-------remove--------");
 
@@ -60,16 +59,13 @@ public class AnnouncementLableController {
     }
 
     @PostMapping("/find")
-    public ResponseResult findAllAnnouncementLable() {
-
+    public ResponseResult findLable(@RequestBody @Validated AnnouncementLableIn in) {
         log.info("-------find--------");
-
-//        return announcementLableApplicationService.findAll();
         return null;
     }
 
     @PostMapping("/findBy")
-    public ResponseResult findByAnnouncementLable(@RequestBody @Validated AnnouncementLableIn in) {
+    public ResponseResult findByLable(@RequestBody @Validated AnnouncementLableIn in) {
         log.info("-------findBy--------");
         return announcementLableApplicationService.findByCondition(in);
     }

@@ -8,7 +8,7 @@ import lombok.Data;
  * @author SHK
  */
 @Data
-public class CreateAnnouncementIn {
+public class AnnouncementIn {
 
     /** 公告标题 */
     private String title;
@@ -20,6 +20,8 @@ public class CreateAnnouncementIn {
     private String pulish;
     /** 公告内容 */
     private String content;
+
+
 
 
 }

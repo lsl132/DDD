@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author SHK
  */
 @Repository
-public interface AnnouncementTypeEntityRepository extends JpaRepository<AnnouncementTypeEntity, Long>, JpaSpecificationExecutor<AnnouncementTypeEntity> {
+public interface AnnouncementTypeEntityRepository extends JpaRepository<AnnouncementTypeEntity, Integer>, JpaSpecificationExecutor<AnnouncementTypeEntity> {
 }

@@ -6,19 +6,16 @@ import org.example.software.domain.aggregate.AnnouncementLableAggregate;
 import org.example.software.domain.entity.AnnouncementLableEntity;
 import org.example.software.domain.service.AnnouncementLableDomainService;
 import org.example.software.infrastructure.repository.BaseRepository;
-import org.example.software.infrastructure.repository.announcement.AnnouncementLableEntityRepository;
 import org.example.software.interfaces.in.AnnouncementLableIn;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.example.software.application.dto.AnnouncementLableDto;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -29,9 +26,9 @@ import java.util.List;
 @Service
 public class AnnouncementLableApplicationService {
 
-    @Autowired
+    @Resource
     private BaseRepository<AnnouncementLableEntity, Integer> baseRepository;
-    @Autowired
+    @Resource
     private AnnouncementLableDomainService announcementLableDomainService;
 
     /**
@@ -50,7 +47,7 @@ public class AnnouncementLableApplicationService {
     /**
      * 信息修改修改
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResponseResult update(Integer id, String lableName) {
         AnnouncementLableEntity lable = baseRepository.findById(AnnouncementLableEntity.class, id);
         AnnouncementLableEntity newLable = announcementLableDomainService.updateLableName(lable, lableName);
@@ -67,19 +64,13 @@ public class AnnouncementLableApplicationService {
     }
 
     /**
-     * 查询全部列表
+     * 分页条件查询
      */
-//    public ResponseResult findAll() {
-//        List<AnnouncementLableEntity> list = announcementLableEntityRepository.findAll();
-//        return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG, list);
-//    }
-
-
     public ResponseResult findByCondition(AnnouncementLableIn in) {
         AnnouncementLableDto dto = new AnnouncementLableDto();
         BeanUtils.copyProperties(in, dto);
         Page<AnnouncementLableEntity> page = announcementLableDomainService.findByCondition(dto);
-        return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG, page);
+        return new ResponseResult<Page<AnnouncementLableEntity>>(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG, page);
     }
 
 }
