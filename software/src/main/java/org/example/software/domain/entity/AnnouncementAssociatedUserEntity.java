@@ -7,14 +7,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 公告查阅人关联
+ * 公告关联的用户 -- 这个属于公告的弱关联
  *
  * @author SHK
  */
 
 @Data
-@Entity(name = "tb_announcement_consult_user_ref")
-public class AnnouncementConsultUserRefEntity implements Serializable {
+@Entity(name = "tb_announcement_associated_user")
+public class AnnouncementAssociatedUserEntity implements Serializable {
 
     @Id
     @Column(columnDefinition = "BIGINT(20)  COMMENT '数据标识'")

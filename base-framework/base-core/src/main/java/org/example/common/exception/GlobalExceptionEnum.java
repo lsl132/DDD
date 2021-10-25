@@ -18,7 +18,9 @@ public enum GlobalExceptionEnum {
     CHECK_NULL_ERROR("100001","数据为空"),
     CHECK_TYPE_ERROR("100002","数据类型有误"),
     CHECK_LENGTH_ERROR("100003","数据长度有误"),
-    CHECK_BOUNDARY_ERROR("100004","数据不在界定内")
+    CHECK_BOUNDARY_ERROR("100004","数据不在界定内"),
+
+    PROHIBITION_CHANGE_STATE("200005","当前状态不可变更数据")
     ;
 
     /** 错误代码 */

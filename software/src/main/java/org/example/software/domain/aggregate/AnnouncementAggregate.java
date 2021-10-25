@@ -32,26 +32,26 @@ public class AnnouncementAggregate implements Serializable {
 
     public AnnouncementEntity aggregateToEntity() {
         AnnouncementEntity entity = new AnnouncementEntity();
-        entity.setId(this.id);
-        entity.setCreateTime(this.createTime);
-
-        entity.setTitle(this.announcementInfo.getTitle());
-        entity.setType(this.announcementInfo.getType());
-        entity.setLabel(this.announcementInfo.getLabel());
-        entity.setContent(this.announcementInfo.getContent());
-        entity.setPublisherName(this.announcementInfo.getPublisherName());
-
-        if(announcementRelease != null) {
-            entity.setState(this.announcementRelease.getState());
-            entity.setIsTop(this.announcementRelease.getIsTop());
-            entity.setContinueType(this.announcementRelease.getContinueType());
-            entity.setContinueSeconds(this.announcementRelease.getContinueSeconds());
-            entity.setInteriorScopeState(this.announcementRelease.getScopeState());
-            entity.setValidNum(this.announcementRelease.getValidNum());
-            entity.setValidStart(this.announcementRelease.getValidStart());
-            entity.setValidEnd(this.announcementRelease.getValidEnd());
-            entity.setPublisherTime(this.announcementRelease.getPublisherTime());
-        }
+//        entity.setId(this.id);
+//        entity.setCreateTime(this.createTime);
+//
+//        entity.setTitle(this.announcementInfo.getTitle());
+//        entity.setType(this.announcementInfo.getType());
+//        entity.setLabel(this.announcementInfo.getLabel());
+//        entity.setContent(this.announcementInfo.getContent());
+//        entity.setPublisherName(this.announcementInfo.getPublisherName());
+//
+//        if(announcementRelease != null) {
+//            entity.setState(this.announcementRelease.getState());
+//            entity.setIsTop(this.announcementRelease.getIsTop());
+//            entity.setContinueType(this.announcementRelease.getContinueType());
+//            entity.setContinueSeconds(this.announcementRelease.getContinueSeconds());
+//            entity.setInteriorScopeState(this.announcementRelease.getScopeState());
+//            entity.setValidNum(this.announcementRelease.getValidNum());
+//            entity.setValidStart(this.announcementRelease.getValidStart());
+//            entity.setValidEnd(this.announcementRelease.getValidEnd());
+//            entity.setPublisherTime(this.announcementRelease.getPublisherTime());
+//        }
 
         return entity;
     }
