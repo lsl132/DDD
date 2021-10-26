@@ -57,10 +57,10 @@ public class AnnouncementAggregate implements Serializable {
             entity.setValidStart(this.announcementRelease.getValidStart());
             entity.setValidEnd(this.announcementRelease.getValidEnd());
             entity.setInteriorScopeState(this.announcementRelease.getInteriorScopeState());
-            entity.setInteriorAdminRoleEntities(this.announcementRelease.interiorAdminRoleVOsTransform());
+            entity.setInteriorAdminRoleEntities(this.announcementRelease.interiorAdminRoleVOsTransform(entity));
 
             entity.setTenantScopeState(this.announcementRelease.getTenantScopeState());
-            entity.setReleaseTenantEntities(this.announcementRelease.tenantVOsTransform());
+            entity.setReleaseTenantEntities(this.announcementRelease.tenantVOsTransform(entity));
             entity.setTenantSuperAdminState(this.announcementRelease.getTenantSuperAdminState());
 
         }

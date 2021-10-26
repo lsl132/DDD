@@ -3,6 +3,7 @@ package org.example.software.domain.aggregate.vo;
 import lombok.Getter;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
+import org.example.software.domain.entity.AnnouncementEntity;
 import org.example.software.domain.entity.AnnouncementReleaseInteriorAdminRoleEntity;
 import org.example.software.domain.entity.AnnouncementReleaseTenantEntity;
 import org.example.software.infrastructure.constant.Constant;
@@ -14,6 +15,8 @@ import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 公告-发布值对象
@@ -82,7 +85,9 @@ public class AnnouncementReleaseVO {
 
 
     /** 替换提醒信息 */
-    public void replaceRemind(@NotNull Integer remindType,@NotNull Integer remindContinueSeconds,@NotNull Integer remindValidDayNum) {
+    public void replaceRemind(@NotNull Integer remindType,
+                              @NotNull Integer remindContinueSeconds,
+                              @NotNull Integer remindValidDayNum) {
         System.out.println(AnnouncementReleaseRemindTypeEnum.getValue(remindType));
 
         if(remindContinueSeconds < Constant.REMIND_SECONDS_MIN_NUM) {
@@ -107,17 +112,21 @@ public class AnnouncementReleaseVO {
 
 
     /**  替换内部范围信息 */
-    public void replaceInteriorScope(Integer interiorScopeState, Collection<AnnouncementReleaseInteriorAdminRoleVO> adminRoleVOs) {
+    public void replaceInteriorScope(Integer interiorScopeState,
+                                     Collection<AnnouncementReleaseInteriorAdminRoleVO> adminRoleVOs) {
         System.out.println(AnnouncementReleaseInteriorScopeStateEnum.getValue(interiorScopeState));
         this.interiorScopeState = interiorScopeState;
         this.adminRoleVOs = adminRoleVOs;
     }
 
     /**  替换租户范围信息 */
-    public void replaceTenantScope(Integer tenantScopeState, Collection<AnnouncementReleaseTenantVO> tenantVOs, Integer tenantSuperAdminState) {
+    public void replaceTenantScope(Integer tenantScopeState,
+                                   Collection<AnnouncementReleaseTenantVO> tenantVOs,
+                                   Integer tenantSuperAdminState) {
         System.out.println(AnnouncementReleaseTenantScopeStateEnum.getValue(tenantScopeState));
         this.tenantScopeState = tenantScopeState;
         this.tenantVOs = tenantVOs;
+        this.tenantSuperAdminState = tenantSuperAdminState;
     }
 
     /** 替换有效时间段 */
@@ -128,16 +137,30 @@ public class AnnouncementReleaseVO {
 
 
     /** 提供转换内部范围集合方法 */
-    public Collection<AnnouncementReleaseInteriorAdminRoleEntity> interiorAdminRoleVOsTransform() {
-        Collection<AnnouncementReleaseInteriorAdminRoleEntity> adminRoleEntities = new ArrayList<AnnouncementReleaseInteriorAdminRoleEntity>();
-        BeanUtils.copyProperties(this.adminRoleVOs, adminRoleEntities);
+    public Collection<AnnouncementReleaseInteriorAdminRoleEntity> interiorAdminRoleVOsTransform(AnnouncementEntity annuncement) {
+        List<AnnouncementReleaseInteriorAdminRoleEntity> adminRoleEntities = adminRoleVOs.stream().map(vo -> {
+                    AnnouncementReleaseInteriorAdminRoleEntity entity = new AnnouncementReleaseInteriorAdminRoleEntity();
+                    entity.setId(vo.getId());
+                    entity.setAnnouncementEntity(annuncement);
+                    entity.setRoleId(vo.getRoleId());
+                    entity.setRoleName(vo.getRoleName());
+                    entity.setCreateTime(vo.getCreateTime());
+                    return entity;
+                }).collect(Collectors.toList());
         return adminRoleEntities;
     }
 
     /** 提供转换租户范围集合方法 */
-    public Collection<AnnouncementReleaseTenantEntity> tenantVOsTransform() {
-        Collection<AnnouncementReleaseTenantEntity>  releaseTenantEntities = new ArrayList<AnnouncementReleaseTenantEntity>();
-        BeanUtils.copyProperties(this.tenantVOs, releaseTenantEntities);
+    public Collection<AnnouncementReleaseTenantEntity> tenantVOsTransform(AnnouncementEntity annuncement) {
+        Collection<AnnouncementReleaseTenantEntity>  releaseTenantEntities = tenantVOs.stream().map( vo -> {
+            AnnouncementReleaseTenantEntity entity = new AnnouncementReleaseTenantEntity();
+            entity.setId(vo.getId());
+            entity.setAnnouncementEntity(annuncement);
+            entity.setTenantId(vo.getTenantId());
+            entity.setTenantName(vo.getTenantName());
+            entity.setCreateTime(vo.getCreateTime());
+            return entity;
+        }).collect(Collectors.toList());
         return releaseTenantEntities;
     }
 
