@@ -32,8 +32,12 @@ public class AnnouncementReleaseTenantVO {
         return entity;
     }
 
+    public  AnnouncementReleaseTenantVO() {
+        super();
+    }
 
     private AnnouncementReleaseTenantVO(Builder builder) {
+        super();
         this.id = builder.id;
         this.announcementId = builder.announcementId;
         this.tenantId = builder.tenantId;

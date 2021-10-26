@@ -14,8 +14,9 @@ public class AnnouncementReleaseInteriorAdminRoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( columnDefinition= "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
-    private Long announcementId;
+    @ManyToOne
+    @JoinColumn(name = "announcement_id", columnDefinition = "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
+    private AnnouncementEntity announcementEntity;
 
     @Column(columnDefinition = "int(11)  COMMENT '角色ID'")
     private Integer roleId;

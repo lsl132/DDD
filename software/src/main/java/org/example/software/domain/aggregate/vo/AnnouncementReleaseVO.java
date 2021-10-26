@@ -3,14 +3,15 @@ package org.example.software.domain.aggregate.vo;
 import lombok.Getter;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
+import org.example.software.domain.entity.AnnouncementReleaseInteriorAdminRoleEntity;
+import org.example.software.domain.entity.AnnouncementReleaseTenantEntity;
 import org.example.software.infrastructure.constant.Constant;
-import org.example.software.infrastructure.enums.AnnouncementReleaseInteriorScopeStateEnum;
-import org.example.software.infrastructure.enums.AnnouncementReleaseRemindTypeEnum;
-import org.example.software.infrastructure.enums.AnnouncementReleaseStateEnum;
-import org.example.software.infrastructure.enums.AnnouncementReleaseTenantScopeStateEnum;
+import org.example.software.infrastructure.enums.*;
+import org.springframework.beans.BeanUtils;
 import org.wildfly.common.annotation.NotNull;
 
 import javax.persistence.Column;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -52,29 +53,37 @@ public class AnnouncementReleaseVO {
 
 
     /**
+     * 发布
+     */
+    public void release() {
+        this.state = AnnouncementReleaseStateEnum.RELEASED.getState();
+        this.releaseTime = new Date();
+    }
+
+    /**
      * 取消发布
      */
     public void cancelRelease() {
         this.state = AnnouncementReleaseStateEnum.UNRELEASED.getState();
-        this.isTop = 0;
+        this.isTop = AnnouncementReleaseIsTopEnum.NOT_TOP.getState();
         this.releaseTime = null;
     }
 
     /** 置顶 */
-    public void top() {
+    public void replaceTop(Integer isTop) {
+        System.out.println(AnnouncementReleaseIsTopEnum.getValue(isTop));
         if(this.state == AnnouncementReleaseStateEnum.UNRELEASED.getState()) {
-            throw new GlobalException(GlobalExceptionEnum.PROHIBITION_CHANGE_STATE.getCode(), "非发布状态不可置顶");
+            if(isTop == AnnouncementReleaseIsTopEnum.TOP.getState()) {
+                throw new GlobalException(GlobalExceptionEnum.PROHIBITION_CHANGE_STATE.getCode(), "非发布状态不可置顶");
+            }
         }
-        this.isTop = 1;
+        this.isTop = AnnouncementReleaseIsTopEnum.TOP.getState();
     }
 
-    public void cancelTop() {
-        this.isTop = 0;
-    }
 
     /** 替换提醒信息 */
     public void replaceRemind(@NotNull Integer remindType,@NotNull Integer remindContinueSeconds,@NotNull Integer remindValidDayNum) {
-        System.out.println(AnnouncementReleaseStateEnum.getValue(state));
+        System.out.println(AnnouncementReleaseRemindTypeEnum.getValue(remindType));
 
         if(remindContinueSeconds < Constant.REMIND_SECONDS_MIN_NUM) {
             throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒时间设置过小低于【"+Constant.REMIND_SECONDS_MIN_NUM+"】");
@@ -86,7 +95,7 @@ public class AnnouncementReleaseVO {
         if(remindValidDayNum < Constant.REMIND_VAILD_DAY_MIN_NUM) {
             throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒天数设置过小小于【"+Constant.REMIND_VAILD_DAY_MIN_NUM+"】");
         }
-        if(remindValidDayNum < Constant.REMIND_VAILD_DAY_MAX_NUM) {
+        if(remindValidDayNum > Constant.REMIND_VAILD_DAY_MAX_NUM) {
             throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒天数设置过大超过【"+Constant.REMIND_VAILD_DAY_MAX_NUM+"】");
         }
 
@@ -99,14 +108,38 @@ public class AnnouncementReleaseVO {
 
     /**  替换内部范围信息 */
     public void replaceInteriorScope(Integer interiorScopeState, Collection<AnnouncementReleaseInteriorAdminRoleVO> adminRoleVOs) {
-
+        System.out.println(AnnouncementReleaseInteriorScopeStateEnum.getValue(interiorScopeState));
+        this.interiorScopeState = interiorScopeState;
+        this.adminRoleVOs = adminRoleVOs;
     }
 
     /**  替换租户范围信息 */
     public void replaceTenantScope(Integer tenantScopeState, Collection<AnnouncementReleaseTenantVO> tenantVOs, Integer tenantSuperAdminState) {
-
+        System.out.println(AnnouncementReleaseTenantScopeStateEnum.getValue(tenantScopeState));
+        this.tenantScopeState = tenantScopeState;
+        this.tenantVOs = tenantVOs;
     }
 
+    /** 替换有效时间段 */
+    public void replaceVaildTime(Date validStart, Date validEnd) {
+        this.validStart = validStart;
+        this.validEnd = validEnd;
+    }
+
+
+    /** 提供转换内部范围集合方法 */
+    public Collection<AnnouncementReleaseInteriorAdminRoleEntity> interiorAdminRoleVOsTransform() {
+        Collection<AnnouncementReleaseInteriorAdminRoleEntity> adminRoleEntities = new ArrayList<AnnouncementReleaseInteriorAdminRoleEntity>();
+        BeanUtils.copyProperties(this.adminRoleVOs, adminRoleEntities);
+        return adminRoleEntities;
+    }
+
+    /** 提供转换租户范围集合方法 */
+    public Collection<AnnouncementReleaseTenantEntity> tenantVOsTransform() {
+        Collection<AnnouncementReleaseTenantEntity>  releaseTenantEntities = new ArrayList<AnnouncementReleaseTenantEntity>();
+        BeanUtils.copyProperties(this.tenantVOs, releaseTenantEntities);
+        return releaseTenantEntities;
+    }
 
     private AnnouncementReleaseVO(Builder builder) {
         this.state = builder.state;
@@ -125,7 +158,7 @@ public class AnnouncementReleaseVO {
     }
 
 
-    public class Builder {
+    public static class Builder {
         private Integer state;
         private Integer isTop;
         private Integer remindType ;
@@ -144,42 +177,43 @@ public class AnnouncementReleaseVO {
         private Collection<AnnouncementReleaseTenantVO> tenantVOs;
         private Integer tenantSuperAdminState;
 
-        public Builder state(@NotNull Integer state) {
+        public Builder state(Integer state) {
             System.out.println(AnnouncementReleaseStateEnum.getValue(state));
             this.state = state;
             return this;
         }
 
-        public Builder isTop(@NotNull Integer isTop) {
-            this.state = state;
+        public Builder isTop(Integer isTop) {
+            System.out.println(AnnouncementReleaseIsTopEnum.getValue(isTop));
+            this.isTop = isTop;
             return this;
         }
 
-        public Builder remindType(@NotNull Integer remindType) {
+        public Builder remindType(Integer remindType) {
             System.out.println(AnnouncementReleaseRemindTypeEnum.getValue(remindType));
             this.remindType = remindType;
             return this;
         }
 
-        public Builder remindContinueSeconds(@NotNull Integer remindContinueSeconds) {
+        public Builder remindContinueSeconds(Integer remindContinueSeconds) {
             if(remindContinueSeconds < Constant.REMIND_SECONDS_MIN_NUM) {
                 throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒时间设置过小低于【"+Constant.REMIND_SECONDS_MIN_NUM+"】");
             }
-            if(remindContinueSeconds < Constant.REMIND_SECONDS_MIN_NUM) {
+            if(remindContinueSeconds > Constant.REMIND_SECONDS_MAX_NUM) {
                 throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒时间设置超过最大【"+Constant.REMIND_SECONDS_MAX_NUM+"】");
             }
             this.remindContinueSeconds = remindContinueSeconds;
             return this;
         }
 
-        public Builder remindValidDayNum(@NotNull Integer remindValidDayNum) {
+        public Builder remindValidDayNum(Integer remindValidDayNum) {
             if(remindValidDayNum < Constant.REMIND_VAILD_DAY_MIN_NUM) {
                 throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒天数设置过小小于【"+Constant.REMIND_VAILD_DAY_MIN_NUM+"】");
             }
-            if(remindValidDayNum < Constant.REMIND_VAILD_DAY_MAX_NUM) {
+            if(remindValidDayNum > Constant.REMIND_VAILD_DAY_MAX_NUM) {
                 throw new GlobalException(GlobalExceptionEnum.CHECK_LENGTH_ERROR.getCode(), "提醒天数设置过大超过【"+Constant.REMIND_VAILD_DAY_MAX_NUM+"】");
             }
-            this.remindType = remindType;
+            this.remindValidDayNum = remindValidDayNum;
             return this;
         }
 
@@ -198,7 +232,7 @@ public class AnnouncementReleaseVO {
             return this;
         }
 
-        public Builder interiorScopeState(@NotNull Integer interiorScopeState) {
+        public Builder interiorScopeState(Integer interiorScopeState) {
             System.out.println(AnnouncementReleaseInteriorScopeStateEnum.getValue(interiorScopeState));
             this.interiorScopeState = interiorScopeState;
             return this;
@@ -209,7 +243,7 @@ public class AnnouncementReleaseVO {
             return this;
         }
 
-        public Builder tenantScopeState(@NotNull Integer tenantScopeState) {
+        public Builder tenantScopeState(Integer tenantScopeState) {
             this.tenantScopeState = tenantScopeState;
             return this;
         }
@@ -219,7 +253,7 @@ public class AnnouncementReleaseVO {
             return this;
         }
 
-        public Builder tenantSuperAdminState(@NotNull Integer tenantSuperAdminState) {
+        public Builder tenantSuperAdminState(Integer tenantSuperAdminState) {
             this.tenantSuperAdminState = tenantSuperAdminState;
             return this;
         }

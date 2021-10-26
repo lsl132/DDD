@@ -10,8 +10,8 @@ public class Constant {
     public static final int GENERIC_NAME_MAX_LENGTH = 10;
 
     /** 通用标题长度 */
-    public static final int GENERIC_TITLE_MIN_LENGTH = 3;
-    public static final int GENERIC_TITLE_MAX_LENGTH = 18;
+    public static final int GENERIC_TITLE_MIN_LENGTH = 2;
+    public static final int GENERIC_TITLE_MAX_LENGTH = 30;
 
     /** 通用简介长度 */
     public static final int GENERIC_INTRO_MIN_LENGTH = 8;
@@ -30,5 +30,5 @@ public class Constant {
 
     /** 提醒有效天数区间 */
     public static final int REMIND_VAILD_DAY_MIN_NUM = 0;
-    public static final int REMIND_VAILD_DAY_MAX_NUM = 30;
+    public static final int REMIND_VAILD_DAY_MAX_NUM = 15;
 }

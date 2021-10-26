@@ -5,11 +5,14 @@ import lombok.Getter;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
 import org.example.software.domain.aggregate.vo.AnnouncementInfoVO;
+import org.example.software.domain.aggregate.vo.AnnouncementReleaseInteriorAdminRoleVO;
+import org.example.software.domain.aggregate.vo.AnnouncementReleaseTenantVO;
 import org.example.software.domain.aggregate.vo.AnnouncementReleaseVO;
 import org.example.software.domain.entity.AnnouncementEntity;
 import org.wildfly.common.annotation.NotNull;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -32,26 +35,35 @@ public class AnnouncementAggregate implements Serializable {
 
     public AnnouncementEntity aggregateToEntity() {
         AnnouncementEntity entity = new AnnouncementEntity();
-//        entity.setId(this.id);
-//        entity.setCreateTime(this.createTime);
-//
-//        entity.setTitle(this.announcementInfo.getTitle());
-//        entity.setType(this.announcementInfo.getType());
-//        entity.setLabel(this.announcementInfo.getLabel());
-//        entity.setContent(this.announcementInfo.getContent());
-//        entity.setPublisherName(this.announcementInfo.getPublisherName());
-//
-//        if(announcementRelease != null) {
-//            entity.setState(this.announcementRelease.getState());
-//            entity.setIsTop(this.announcementRelease.getIsTop());
-//            entity.setContinueType(this.announcementRelease.getContinueType());
-//            entity.setContinueSeconds(this.announcementRelease.getContinueSeconds());
-//            entity.setInteriorScopeState(this.announcementRelease.getScopeState());
-//            entity.setValidNum(this.announcementRelease.getValidNum());
-//            entity.setValidStart(this.announcementRelease.getValidStart());
-//            entity.setValidEnd(this.announcementRelease.getValidEnd());
-//            entity.setPublisherTime(this.announcementRelease.getPublisherTime());
-//        }
+        entity.setId(this.id);
+        entity.setCreateTime(this.createTime);
+
+        entity.setTitle(this.announcementInfo.getTitle());
+        entity.setIntro(this.announcementInfo.getIntro());
+        entity.setType(this.announcementInfo.getType());
+        entity.setLabelNames(this.announcementInfo.getLabelNames());
+        entity.setContent(this.announcementInfo.getContent());
+        entity.setAuthor(this.announcementInfo.getAuthor());
+
+        if(announcementRelease != null) {
+            entity.setState(this.announcementRelease.getState());
+            entity.setIsTop(this.announcementRelease.getIsTop());
+            entity.setRemindType(this.announcementRelease.getRemindType());
+            entity.setRemindContinueSeconds(this.announcementRelease.getRemindContinueSeconds());
+            entity.setRemindValidDayNum(this.announcementRelease.getRemindValidDayNum());
+
+            entity.setReleaseTime(this.announcementRelease.getReleaseTime());
+
+            entity.setValidStart(this.announcementRelease.getValidStart());
+            entity.setValidEnd(this.announcementRelease.getValidEnd());
+            entity.setInteriorScopeState(this.announcementRelease.getInteriorScopeState());
+            entity.setInteriorAdminRoleEntities(this.announcementRelease.interiorAdminRoleVOsTransform());
+
+            entity.setTenantScopeState(this.announcementRelease.getTenantScopeState());
+            entity.setReleaseTenantEntities(this.announcementRelease.tenantVOsTransform());
+            entity.setTenantSuperAdminState(this.announcementRelease.getTenantSuperAdminState());
+
+        }
 
         return entity;
     }

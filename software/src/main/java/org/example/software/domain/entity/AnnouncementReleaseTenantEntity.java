@@ -23,8 +23,9 @@ public class AnnouncementReleaseTenantEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( columnDefinition= "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
-    private Long announcementId;
+    @ManyToOne
+    @JoinColumn(name = "announcement_id", columnDefinition = "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
+    private AnnouncementEntity announcementEntity;
 
     @Column(columnDefinition = "BIGINT(20)  COMMENT '租户ID'")
     private Integer tenantId;

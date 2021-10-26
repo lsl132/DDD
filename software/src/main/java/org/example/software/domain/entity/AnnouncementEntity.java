@@ -2,9 +2,15 @@ package org.example.software.domain.entity;
 
 import lombok.Data;
 import org.example.software.domain.aggregate.AnnouncementAggregate;
+import org.example.software.domain.aggregate.vo.AnnouncementInfoVO;
+import org.example.software.domain.aggregate.vo.AnnouncementReleaseInteriorAdminRoleVO;
+import org.example.software.domain.aggregate.vo.AnnouncementReleaseTenantVO;
+import org.example.software.domain.aggregate.vo.AnnouncementReleaseVO;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -44,22 +50,19 @@ public class AnnouncementEntity implements Serializable {
     private Integer author;
 
     @Column(columnDefinition = "int(2)  COMMENT '是否置顶 0不置顶 1置顶'")
-    private Integer isTop;
+    private int isTop;
 
     @Column(columnDefinition = "int(2)  COMMENT '提醒类型 0不提醒 1弹窗(详情) 2弹窗(简介) 3站内信'")
-    private Integer remindType;
+    private int remindType;
 
     @Column(columnDefinition = "int(5)  COMMENT '提醒持续时间(秒)'")
-    private Integer remindContinueSeconds ;
+    private int remindContinueSeconds ;
 
     @Column(columnDefinition = "int(5)  COMMENT '提醒有效天数'")
-    private Integer remindValidDayNum ;
+    private int remindValidDayNum ;
 
     @Column(columnDefinition = "int(2)  COMMENT '状态 0未发布 1已发布'")
-    private Integer state;
-
-    @Column(columnDefinition = "int(5)  COMMENT '有效期天数'")
-    private Integer validNum;
+    private int state;
 
     @Column(columnDefinition = "datetime  COMMENT '有效期开始时间'")
     private Date validStart;
@@ -75,21 +78,64 @@ public class AnnouncementEntity implements Serializable {
     private int interiorScopeState;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
-    private Collection<AnnouncementReleaseTenantEntity> tenantScopes;
+    private Collection<AnnouncementReleaseInteriorAdminRoleEntity> interiorAdminRoleEntities;
 
     /**  租户下可见用户 */
     @Column(columnDefinition = "int(2)  COMMENT '租户范围 0不包含 1包含'")
     private int tenantScopeState;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
-    private Collection<AnnouncementAssociatedUserEntity> associatedUser;
+    private Collection<AnnouncementReleaseTenantEntity> releaseTenantEntities;
 
     @Column(columnDefinition = "int(2)  COMMENT '只发给租管超管 0全部管理员 1只发给超管'")
     private int tenantSuperAdminState;
 
 
+    /** 公告关联用户 */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
+    private Collection<AnnouncementAssociatedUserEntity> associatedUser;
+
+
     public AnnouncementAggregate entityToAggregate() {
-        return null;
+
+        Collection<AnnouncementReleaseInteriorAdminRoleVO> interiorAdminRoleVOs = new ArrayList<AnnouncementReleaseInteriorAdminRoleVO>();
+        BeanUtils.copyProperties(this.interiorAdminRoleEntities, interiorAdminRoleVOs);
+        Collection<AnnouncementReleaseTenantVO> releaseTenantVOs = new ArrayList<AnnouncementReleaseTenantVO>();
+        BeanUtils.copyProperties(this.releaseTenantEntities, releaseTenantVOs);
+
+        AnnouncementInfoVO infoVO = new AnnouncementInfoVO.Builder()
+                .title(this.title)
+                .intro(this.intro)
+                .labelNames(this.labelNames)
+                .author(this.author)
+                .type(this.type)
+                .content(this.content)
+                .buil();
+
+        AnnouncementReleaseVO releaseVO = new AnnouncementReleaseVO.Builder()
+                .state(this.state)
+                .isTop(this.isTop)
+                .releaseTime(this.releaseTime)
+                .remindType(this.remindType)
+                .remindContinueSeconds(this.remindContinueSeconds)
+                .remindValidDayNum(this.remindValidDayNum)
+                .validStart(this.validStart)
+                .validEnd(this.validEnd)
+                .interiorScopeState(this.interiorScopeState)
+                .adminRoleVOs(interiorAdminRoleVOs)
+                .tenantScopeState(this.tenantScopeState)
+                .tenantVOs(releaseTenantVOs)
+                .tenantSuperAdminState(this.tenantSuperAdminState)
+                .buil();
+
+        AnnouncementAggregate aggregate = new AnnouncementAggregate.Builder()
+                .id(this.id)
+                .createTime(this.createTime)
+                .announcementInfo(infoVO)
+                .announcementRelease(releaseVO)
+                .build();
+
+        return aggregate;
     }
 
 

@@ -33,8 +33,12 @@ public class AnnouncementReleaseInteriorAdminRoleVO {
         return entity;
     }
 
+    public AnnouncementReleaseInteriorAdminRoleVO() {
+        super();
+    }
 
     private AnnouncementReleaseInteriorAdminRoleVO(Builder builder) {
+        super();
         this.id = builder.id;
         this.announcementId = builder.announcementId;
         this.roleId = builder.roleId;

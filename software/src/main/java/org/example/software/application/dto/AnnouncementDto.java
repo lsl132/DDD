@@ -1,4 +1,4 @@
-package org.example.software.interfaces.in;
+package org.example.software.application.dto;
 
 import lombok.Data;
 import org.example.software.domain.aggregate.vo.AnnouncementReleaseInteriorAdminRoleVO;
@@ -8,14 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 创建公告入参
+ * 公告信息
  *
  * @author SHK
  */
 @Data
-public class AnnouncementIn {
+public class AnnouncementDto {
 
-    private Long id;
     /** 公告标题 */
     private String title;
     /** 公告简介 */
@@ -25,11 +24,10 @@ public class AnnouncementIn {
     /** 公告标签 */
     private String lableNames;
     /** 发布人 */
-    private Integer author;
+    private String author;
     /** 公告内容 */
     private String content;
-
-
+    /**********************************************************/
     private Integer state;
     private Integer isTop;
 
@@ -46,9 +44,15 @@ public class AnnouncementIn {
     private Integer tenantScopeState;
     private List<AnnouncementReleaseTenantVO> releaseTenantEntities;
     private Integer tenantSuperAdminState;
-
+    /*******************************************************************/
+    private Date startCreateTime;
+    private Date endCreateTime;
     private Integer pageNum;
     private Integer pageSize;
+
+
+
+
 
 
 }
