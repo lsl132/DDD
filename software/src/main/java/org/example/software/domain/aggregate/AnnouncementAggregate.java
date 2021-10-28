@@ -2,6 +2,7 @@ package org.example.software.domain.aggregate;
 
 
 import lombok.Getter;
+import lombok.ToString;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
 import org.example.software.domain.aggregate.vo.AnnouncementInfoVO;
@@ -21,8 +22,10 @@ import java.util.Date;
  * @author SHK
  */
 @Getter
+@ToString
 public class AnnouncementAggregate implements Serializable {
 
+    private static final long serialVersionUID = 51245615438154123L;
 
     private Long id;
 

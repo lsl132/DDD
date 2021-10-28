@@ -3,6 +3,8 @@ package org.example.software.application.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.response.ResponseResult;
 import org.example.software.application.dto.AnnouncementDto;
+import org.example.software.application.event.AnnouncementReleaseEvent;
+import org.example.software.application.event.AnnouncementUnReleaseEvent;
 import org.example.software.domain.aggregate.AnnouncementAggregate;
 import org.example.software.domain.aggregate.vo.AnnouncementInfoVO;
 import org.example.software.domain.entity.AnnouncementEntity;
@@ -10,6 +12,8 @@ import org.example.software.domain.service.AnnouncementDomainService;
 import org.example.software.infrastructure.repository.BaseRepository;
 import org.example.software.interfaces.in.AnnouncementIn;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +34,8 @@ public class AnnouncementApplicationService {
     private BaseRepository<AnnouncementEntity, Long> baseRepository;
     @Resource
     private AnnouncementDomainService announcementDomainService;
+    @Autowired
+    private ApplicationContext applicationContext;
 
 
     /**
@@ -55,7 +61,7 @@ public class AnnouncementApplicationService {
         AnnouncementEntity entity = aggregate.aggregateToEntity();
         //存储实体
         baseRepository.save(entity);
-        return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG);
+        return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG, entity.getId());
     }
 
     /**
@@ -104,6 +110,7 @@ public class AnnouncementApplicationService {
         baseRepository.replace(newEntity);
 
         //发布消息，由消费者查找绑定关联用户...
+        applicationContext.publishEvent(new AnnouncementReleaseEvent(applicationContext, aggregate));
 
         return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG);
     }
@@ -122,6 +129,7 @@ public class AnnouncementApplicationService {
         baseRepository.replace(newEntity);
 
         //发布消息，由消费者处理未读取过的关联用户...
+        applicationContext.publishEvent(new AnnouncementUnReleaseEvent(applicationContext, aggregate));
 
         return new ResponseResult(ResponseResult.SUCCESS_CODE, ResponseResult.SUCCESS_MSG);
     }

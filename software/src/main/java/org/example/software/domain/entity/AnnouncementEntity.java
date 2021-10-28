@@ -91,11 +91,6 @@ public class AnnouncementEntity implements Serializable {
     private int tenantSuperAdminState;
 
 
-    /** 公告关联用户 */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "announcementEntity", fetch = FetchType.LAZY)
-    private Collection<AnnouncementAssociatedUserEntity> associatedUser;
-
-
     public AnnouncementAggregate entityToAggregate() {
 
         Collection<AnnouncementReleaseInteriorAdminRoleVO> interiorAdminRoleVOs = new ArrayList<AnnouncementReleaseInteriorAdminRoleVO>();

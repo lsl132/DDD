@@ -21,9 +21,8 @@ public class AnnouncementAssociatedUserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "announcement_id", columnDefinition = "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
-    private AnnouncementEntity announcementEntity;
+    @Column(columnDefinition = "BIGINT(20) NOT NULL COMMENT '所属公告ID'")
+    private Long announcementId;
 
     @Column(columnDefinition = "INT(11)  COMMENT '租户ID'")
     private Integer tenantId;

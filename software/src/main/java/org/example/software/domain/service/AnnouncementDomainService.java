@@ -68,6 +68,7 @@ public class AnnouncementDomainService {
 
         return repository.findAll(new Specification<AnnouncementEntity>() {
 
+            @Override
             public Predicate toPredicate(Root<AnnouncementEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 if (!StringUtils.isEmpty(dto.getTitle())) {
