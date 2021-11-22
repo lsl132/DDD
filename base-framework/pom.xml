@@ -12,18 +12,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-boot.version>2.3.6.RELEASE</spring-boot.version>
-        <mysql.version>5.1.45</mysql.version>
-        <lombok.version>1.18.10</lombok.version>
+        <java.version>17</java.version>
+        <spring-boot.version>2.5.6</spring-boot.version>
+        <mariadb.version>2.7.4</mariadb.version>
+        <lombok.version>1.18.22</lombok.version>
         <fastjson.version>1.2.68</fastjson.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.deploy.version>2.7</maven.deploy.version>
+        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
     </properties>
 
 
     <modules>
         <module>base-core</module>
         <module>base-utils</module>
-        <module>base-mysql</module>
+        <module>base-mariadb</module>
     </modules>
 
     <dependencyManagement>
@@ -48,9 +51,9 @@
             </dependency>
 
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${mariadb.version}</version>
             </dependency>
 
         </dependencies>
@@ -65,48 +68,24 @@
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
-                <version>3.8.0</version>
+                <version>${maven.compiler.version}</version>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
+                <version>${maven.deploy.version}</version>
             </plugin>
-
+            <!--  跳过测试  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
-
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>gangtise-snapshot</id>
-            <name>nexus-gangtise-snapshot</name>
-            <url>http://192.168.1.65:8081/repository/gangtise-snapshot/</url>
-        </repository>
-    </distributionManagement>
-
 
 </project>

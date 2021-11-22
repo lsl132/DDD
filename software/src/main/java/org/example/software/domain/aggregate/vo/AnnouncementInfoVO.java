@@ -5,7 +5,6 @@ import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
 import org.example.software.infrastructure.constant.Constant;
 import org.wildfly.common.annotation.NotNull;
-import sun.awt.image.IntegerComponentRaster;
 
 import javax.persistence.Column;
 

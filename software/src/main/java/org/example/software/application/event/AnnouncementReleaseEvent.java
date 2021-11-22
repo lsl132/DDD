@@ -1,7 +1,5 @@
 package org.example.software.application.event;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.example.software.domain.aggregate.AnnouncementAggregate;
 import org.springframework.context.ApplicationEvent;
 
