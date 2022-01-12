@@ -2,8 +2,6 @@ package org.example.common.exception;
 
 import org.wildfly.common.annotation.NotNull;
 
-import java.util.Date;
-
 public enum GlobalExceptionEnum {
 
     SYS_ERROR("999999","系统错误"),
