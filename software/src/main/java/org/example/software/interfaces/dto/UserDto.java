@@ -1,27 +1,25 @@
 package org.example.software.interfaces.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * @Describe : TODO
  * @Author : SHK
  * @Date : 2022/1/7 10:17
  */
-@Getter
-@Builder
+@Data
 public class UserDto {
 
-    private String title;
+    private String userName;
 
-    private String intro;
-
-    private String lableNames;
-
-    private String author;
+    private String nickName;
 
     private Integer type;
 
-    private String content;
+    private String mobile;
+
+    private String email;
+
+    private String password;
 
 }

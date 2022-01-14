@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author SHK
  */
 @Repository
-public interface UserAccountEntityRepository extends JpaRepository<UserAccount, Long>, JpaSpecificationExecutor<UserAccount> {
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long>, JpaSpecificationExecutor<UserAccount> {
 }

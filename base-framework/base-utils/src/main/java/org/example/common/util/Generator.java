@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * @Describe : 帐号生成器
+ * @Describe : 生成器——帐号、姓名、手机号、邮箱、密码都可以生成
  * @Author : SHK
  * @Date : 2022/1/12 17:14
  */

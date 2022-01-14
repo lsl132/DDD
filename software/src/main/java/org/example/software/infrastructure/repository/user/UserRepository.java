@@ -1,6 +1,6 @@
 package org.example.software.infrastructure.repository.user;
 
-import org.example.software.domain.aggregate.UserAggregate;
+import org.example.software.domain.aggregate.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author SHK
  */
 @Repository
-public interface UserRepository extends JpaRepository<UserAggregate, Long>, JpaSpecificationExecutor<UserAggregate> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 }

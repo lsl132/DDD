@@ -1,6 +1,8 @@
 package org.example.software.infrastructure.enums;
 
 import lombok.Getter;
+import org.example.common.exception.GlobalException;
+import org.example.common.exception.GlobalExceptionEnum;
 
 @Getter
 public enum UserTypeEnum {
@@ -22,7 +24,7 @@ public enum UserTypeEnum {
                 return e.getValue();
             }
         }
-        return null;
+        throw new GlobalException(GlobalExceptionEnum.CHECK_BOUNDARY_ERROR.getCode(), "用户类型不在界定范围内");
     }
 
 

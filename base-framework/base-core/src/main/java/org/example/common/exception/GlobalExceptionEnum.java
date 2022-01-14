@@ -1,6 +1,7 @@
 package org.example.common.exception;
 
-import org.wildfly.common.annotation.NotNull;
+
+import javax.validation.constraints.NotNull;
 
 public enum GlobalExceptionEnum {
 

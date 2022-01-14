@@ -1,8 +1,8 @@
 package org.example.software.domain.aggregate;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
 import org.example.software.domain.aggregate.entity.UserAccount;
@@ -23,15 +23,16 @@ import java.util.Set;
 /**
  * 用户
  * 这是一个实体同时也是一个聚合根
+ * 注意：不要用lombok的@Data ，会自动生成toString引起关系调用堆栈溢出
  * @author SHK
  */
-@Data
+@Getter
+@Setter
 @Entity(name = "tb_user")
-public class UserAggregate implements Serializable {
+public class User implements Serializable {
 
     @Id
     @Column(columnDefinition = "BIGINT(20)  COMMENT '用户标识'")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '用户名称'")
@@ -43,8 +44,8 @@ public class UserAggregate implements Serializable {
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '用户头像'")
     private String avatar;
 
-    @Column(columnDefinition = "VARCHAR(255)  COMMENT '用户说明'")
-    private String explain;
+    @Column(columnDefinition = "VARCHAR(1024)  COMMENT '用户备注说明'")
+    private String remarks;
 
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '用户级别-9：正式用户，2：三方映射用户'")
     private Integer level;
@@ -65,11 +66,14 @@ public class UserAggregate implements Serializable {
     })
     private UserContact userContact;
 
-    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<UserAccount> userAccount;
 
     @ElementCollection
+    @CollectionTable(
+            name = "tb_user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     @AttributeOverrides({
             @AttributeOverride(name = "roleId",column = @Column(columnDefinition = "INT(10)  COMMENT '角色ID'")),
             @AttributeOverride(name = "roleName",column = @Column(columnDefinition = "VARCHAR(255)  COMMENT '角色名称'"))
@@ -77,6 +81,10 @@ public class UserAggregate implements Serializable {
     private Set<UserRole> userRoles;
 
     @ElementCollection
+    @CollectionTable(
+            name = "tb_user_authority_package",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     @AttributeOverrides({
             @AttributeOverride(name = "authorityPackageId",column = @Column(columnDefinition = "INT(10)  COMMENT '权限包ID'")),
             @AttributeOverride(name = "authorityPackageName",column = @Column(columnDefinition = "VARCHAR(255)  COMMENT '权限包名称'"))
@@ -85,12 +93,12 @@ public class UserAggregate implements Serializable {
 
     // ------------------------------------------------------------------------------------------------------
 
-    public void replaceBaseInfo(String newNickName, String newExplain) {
+    public void replaceBaseInfo(String newNickName, String newRemarks) {
         //参数检查...
 
         //替换值
         this.nickName = newNickName;
-        this.explain = newExplain;
+        this.remarks = newRemarks;
 
     }
 

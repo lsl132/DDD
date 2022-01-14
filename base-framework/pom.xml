@@ -80,7 +80,6 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${fasterxml.jackson.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

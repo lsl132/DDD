@@ -1,35 +1,33 @@
 package org.example.software.domain.aggregate.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.common.exception.GlobalException;
 import org.example.common.exception.GlobalExceptionEnum;
 import org.example.common.util.MD5Util;
-import org.example.software.domain.aggregate.UserAggregate;
-import org.springframework.beans.BeanUtils;
+import org.example.software.domain.aggregate.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 /**
  * 公告数据表实体类
  * @author SHK
  */
-
-@Data
+@Getter
+@Setter
 @Entity(name = "tb_user_account")
 public class UserAccount implements Serializable {
 
     @Id
-    @Column(columnDefinition = "BIGINT(20)  COMMENT '公告ID'")
+    @Column(columnDefinition = "BIGINT(20)  COMMENT 'ID'")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserAggregate user;
+    private User user;
 
     @Column(columnDefinition = "VARCHAR(255)  COMMENT '帐号'")
     private String identifier;

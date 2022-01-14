@@ -1,6 +1,8 @@
 package org.example.software.domain.aggregate.vo;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 
@@ -9,7 +11,8 @@ import javax.persistence.Embeddable;
  * @Author : SHK
  * @Date : 2022/1/12 15:42
  */
-@Data
+@Getter
+@Setter
 @Embeddable
 public class UserRole {
 

@@ -3,7 +3,7 @@ package org.example.software.domain.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.software.domain.aggregate.entity.UserAccount;
 import org.example.software.infrastructure.repository.BaseRepository;
-import org.example.software.infrastructure.repository.user.UserAccountEntityRepository;
+import org.example.software.infrastructure.repository.user.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class UserDomainService {
     private BaseRepository<UserAccount, Long> baseRepository;
 
     @Autowired
-    private UserAccountEntityRepository repository;
+    private UserAccountRepository repository;
 
 
 
